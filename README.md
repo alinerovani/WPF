@@ -1,4 +1,4 @@
-# WPF
+# WPF (Windows Presentation Foundation)
 Initial project using WPF with the CRUD funcionality
 
 ![image](https://user-images.githubusercontent.com/50721734/182400273-b8d76cdb-9adc-4cd1-8580-d96b92c6618b.png)
