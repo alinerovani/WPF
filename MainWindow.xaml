@@ -5,22 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Names"
         mc:Ignorable="d"
-        Title="Names" Height="500" Width="800">
+        Title="CRUD Names" Height="500" Width="800">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Label Content="Names" Grid.Row="0" Grid.Column="0" />
-        <ListBox Grid.Row="1" x:Name="lstNames" />
+        <ListBox Grid.Row="1" x:Name="lstNames" SelectionChanged="lstNames_SelectionChanged" />
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
             <TextBox x:Name="txtName" />
-            <Button x:Name="btnAdd" Margin="0,5,0,0" Content="Add Name" Width="100" Click="btnAdd_Click" />
+            <Grid Margin="0,5,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="btnAdd" Content="Add" Click="btnAdd_Click" Background="#FF28A745" Foreground="White" Margin="0,0,5,0" />
+                <Button x:Name="btnUpdate" Grid.Column="1" Content="Update" Click="btnUpdate_Click" Background="#FF6C757D" Foreground="White" Margin="0,0,5,0" />
+                <Button x:Name="btnDelete" Grid.Column="2" Content="Delete" Click="btnDelete_Click" Background="#FFDC3545" Foreground="White" Margin="0,0,5,0" />
+            </Grid>
         </StackPanel>
     </Grid>
 </Window>
