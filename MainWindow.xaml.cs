@@ -84,7 +84,6 @@ namespace Names
             btnAdd.Visibility = Visibility.Hidden;
             btnDelete.Visibility = Visibility.Visible;
             btnUpdate.Visibility = Visibility.Visible;
-
         }
 
         protected void btnAdd_Click(object sender, RoutedEventArgs e)
