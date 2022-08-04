@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Names"
         mc:Ignorable="d"
-        Title="CRUD Names" Height="500" Width="800">
+        Title="CQRS People" Height="500" Width="800">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -16,10 +16,21 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Label Content="Names" Grid.Row="0" Grid.Column="0" />
-        <ListBox Grid.Row="1" x:Name="lstNames" SelectionChanged="lstNames_SelectionChanged" />
+        <Label Content="People" Grid.Row="0" Grid.Column="0" />
+        <ListView Grid.Row="1" x:Name="lstPeople" SelectionChanged="lstPeople_SelectionChanged" ItemsSource="{Binding SourceCollection}" AlternationCount="2">
+            <ListView.View>
+                <GridView ColumnHeaderContainerStyle="{StaticResource HeaderStyle}">
+                    <GridViewColumn Header="First name" Width="120" DisplayMemberBinding="{Binding FirstName}" />
+                    <GridViewColumn Header="Last name" Width="120" DisplayMemberBinding="{Binding LastName}" />
+                    <GridViewColumn Header="Birth date" Width="100" DisplayMemberBinding="{Binding BirthDate, StringFormat='{}{0:MM/dd/yyyy}'}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        
         <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,0,0,0">
-            <TextBox x:Name="txtName" />
+            <TextBox x:Name="txtFirstName" Style="{StaticResource MyWaterMarkStyle}" Tag="First name" Margin="5,0,5,5" />
+            <TextBox x:Name="txtLastName" Style="{StaticResource MyWaterMarkStyle}" Tag="Last name" Margin="5"/>
+            <TextBox x:Name="txtBirthDate" Style="{StaticResource MyWaterMarkStyle}" Tag="Birth date" Margin="5,5,5,0" />
             <Grid Margin="0,5,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -31,9 +42,9 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="btnAdd" Content="Add" Click="btnAdd_Click" Background="#FF28A745" Foreground="White" Margin="0,0,5,0" />
-                <Button x:Name="btnUpdate" Grid.Column="1" Content="Update" Click="btnUpdate_Click" Background="#FF6C757D" Foreground="White" Margin="0,0,5,0" />
-                <Button x:Name="btnDelete" Grid.Column="2" Content="Delete" Click="btnDelete_Click" Background="#FFDC3545" Foreground="White" Margin="0,0,5,0" />
+                <Button x:Name="btnAdd" Content="Add" Click="btnAdd_Click" Background="#FF28A745" Foreground="White" Margin="5" />
+                <Button x:Name="btnUpdate" Grid.Column="1" Content="Update" Click="btnUpdate_Click" Background="#FF6C757D" Foreground="White" Margin="5" />
+                <Button x:Name="btnDelete" Grid.Column="2" Content="Delete" Click="btnDelete_Click" Background="#FFDC3545" Foreground="White" Margin="5" />
             </Grid>
         </StackPanel>
     </Grid>

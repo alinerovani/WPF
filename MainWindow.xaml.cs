@@ -1,6 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using Names.Commands;
+using Names.DTO;
+using Names.Model;
+using Names.Queries;
+using Names.Repository;
+using Names.Helpers;
 
 namespace Names
 {
@@ -9,81 +16,127 @@ namespace Names
         public MainWindow()
         {
             InitializeComponent();
+
             btnDelete.Visibility = Visibility.Hidden;
             btnUpdate.Visibility = Visibility.Hidden;
         }
-
-        private enum Operation
-        {
-            Update = 1,
-            Delete = 2
-        }
-
-        private void ValidateName()
-        {
-            if (string.IsNullOrWhiteSpace(txtName.Text))
-                throw new Exception("Name isn't defined!");
-
-            if (lstNames.Items.Contains(txtName.Text))
-                throw new Exception("Name cannot be duplicated!");
-        }
-
         private void AddName()
         {
+            var items = RetrieveListItems();
+
             try
             {
-                ValidateName();
+                var personCommand = new PersonCommand(new PersonCommandRepository(items));
+                personCommand.SavePerson(new Model.Person
+                {
+                    FirstName = txtFirstName.Text,
+                    LastName = txtLastName.Text,
+                    BirthDate = ConversorHelper.CDateTime(txtBirthDate.Text)
+                });
+
+                ClearControls();
+                lstPeople.ItemsSource = items;
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
                 return;
             }
-
-            lstNames.Items.Add(txtName.Text);
-            txtName.Clear();
         }
 
-        private void ChangeName(Operation operation)
+        private void UpdateName()
         {
-            switch (operation)
+            var items = RetrieveListItems();
+
+            try
             {
-                case Operation.Update:
-                    try
-                    {
-                        if (!lstNames.Items[lstNames.SelectedIndex].Equals(txtName.Text))
-                            ValidateName();
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-                        return;
-                    }
+                var personCommand = new PersonCommand(new PersonCommandRepository(items));
+                personCommand.UpdatePerson(new Model.Person
+                {
+                    ID = lstPeople.SelectedIndex,
+                    FirstName = txtFirstName.Text,
+                    LastName = txtLastName.Text,
+                    BirthDate = ConversorHelper.CDateTime(txtBirthDate.Text)
+                });
 
-                    lstNames.Items[lstNames.SelectedIndex] = txtName.Text;
-                    break;
-                case Operation.Delete:
-                    lstNames.Items.RemoveAt(lstNames.SelectedIndex);
-                    break;
+                ClearControls();
+                lstPeople.ItemsSource = items;
+
             }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return;
+            }
+        }
 
-            txtName.Clear();
+        private void DeleteName()
+        {
+            var items = RetrieveListItems();
+            try
+            {
+                var personCommand = new PersonCommand(new PersonCommandRepository(items));
+                personCommand.DeletePerson(lstPeople.SelectedIndex);
+
+                ClearControls();
+                lstPeople.ItemsSource = items;
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return;
+            }
+        } 
+
+        private void lstPeople_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lstPeople.SelectedItem == null)
+                return;
+
+            var person = (Person)lstPeople.SelectedItem;
+
+            txtFirstName.Text = person.FirstName;
+            txtLastName.Text = person.LastName;
+            txtBirthDate.Text = person.BirthDate.ToString("dd/MM/yyyy");
+
+            btnAdd.Visibility = Visibility.Hidden;
+            btnDelete.Visibility = Visibility.Visible;
+            btnUpdate.Visibility = Visibility.Visible;
+        }
+
+        private void QueryPeople()
+        {
+            var items = RetrieveListItems();
+
+            PersonQuery personQuery = new PersonQuery(new PersonQueryRepository(items));
+            var people = personQuery.GetAll();
+            lstPeople.ItemsSource = people;
+        }
+
+        private void ClearControls()
+        {
+            txtFirstName.Clear();
+            txtLastName.Clear();
+            txtBirthDate.Clear();
 
             btnDelete.Visibility = Visibility.Hidden;
             btnUpdate.Visibility = Visibility.Hidden;
             btnAdd.Visibility = Visibility.Visible;
         }
 
-        private void lstNames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private List<Person> RetrieveListItems()
         {
-            if (lstNames.SelectedItem == null)
-                return;
+            List<Person> items = new List<Person>();
+            Person item = new Person();
 
-            txtName.Text = lstNames.SelectedItem.ToString();
+            for (int i = 0; i < lstPeople.Items.Count; i++)
+            {
+                item = (Person)lstPeople.Items[i];
+                item.ID = i;
+                items.Add(item);
+            }
 
-            btnAdd.Visibility = Visibility.Hidden;
-            btnDelete.Visibility = Visibility.Visible;
-            btnUpdate.Visibility = Visibility.Visible;
+            return items;
         }
 
         protected void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -93,12 +146,12 @@ namespace Names
 
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
-            ChangeName(Operation.Update);
+            UpdateName();
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            ChangeName(Operation.Delete);
+            DeleteName();
         }
     }
 }
