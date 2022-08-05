@@ -7,21 +7,21 @@ namespace Names.Repository
 {
     public class PersonCommandRepository : IPersonCommandRepository
     {
-        private List<Person> _database;
-        public PersonCommandRepository(List<Person> database)
+        private List<Person> _repository;
+        public PersonCommandRepository(List<Person> repository)
         {
-            _database = database;
+            _repository = repository;
         }
 
         public void SavePerson(Person person)
         {
             //Persist the record in the data store 
-            _database.Add(person);
+            _repository.Add(person);
         }
 
         public void UpdatePerson(Person person)
         {
-            int records = (from p in _database
+            int records = (from p in _repository
                            where (p.FirstName == person.FirstName
                            && p.LastName == person.LastName
                            && p.BirthDate == person.BirthDate
@@ -31,13 +31,13 @@ namespace Names.Repository
                 throw new Exception("Duplicated record!");
 
             //Update the record in the data store 
-            _database[person.ID] = person;
+            _repository[person.ID] = person;
         }
 
         public void DeletePerson(int ID)
         {
             //Delete the record in the data store 
-            _database.RemoveAt(ID);
+            _repository.RemoveAt(ID);
         }
     }
 }
