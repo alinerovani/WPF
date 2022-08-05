@@ -22,7 +22,7 @@
                 <GridView ColumnHeaderContainerStyle="{StaticResource HeaderStyle}">
                     <GridViewColumn Header="First name" Width="120" DisplayMemberBinding="{Binding FirstName}" />
                     <GridViewColumn Header="Last name" Width="120" DisplayMemberBinding="{Binding LastName}" />
-                    <GridViewColumn Header="Birth date" Width="100" DisplayMemberBinding="{Binding BirthDate, StringFormat='{}{0:MM/dd/yyyy}'}" />
+                    <GridViewColumn Header="Birth date" Width="100" DisplayMemberBinding="{Binding BirthDate, StringFormat='{}{0:dd/MM/yyyy}'}" />
                 </GridView>
             </ListView.View>
         </ListView>

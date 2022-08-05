@@ -22,7 +22,7 @@ namespace Names.Commands
                 throw new Exception("Last name isn't defined!");
 
             if (person.BirthDate == DateTime.MinValue)
-                throw new Exception("Date of Birth isn't defined!");
+                throw new Exception("Birth date isn't defined!");
 
             _repository.SavePerson(person);
         }
@@ -36,7 +36,7 @@ namespace Names.Commands
                 throw new Exception("Last name isn't defined!");
 
             if (person.BirthDate == DateTime.MinValue)
-                throw new Exception("Date of Birth isn't defined!");
+                throw new Exception("Birth date isn't defined!");
 
             _repository.UpdatePerson(person);
         }
